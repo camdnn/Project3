@@ -1,0 +1,50 @@
+Project 3 - Partnership Responsibilities
+CSC/CPE 203
+Due: November 19, 2025
+
+Team Members: Camnden Mann and Ryan Reeves
+
+==============================================================================
+
+Overall Project Responsibilities:
+
+Camden Mann:
+- Implemented the PathingStrategy interface according to assignment specifications
+- Created the AStarPathingStrategy class with A* pathfinding algorithm
+  * Designed priority queue implementation for open list
+  * Implemented closed list using HashSet for visited nodes
+  * Developed cost calculation functions (g-cost, h-cost, f-cost)
+- Modified Point class to include fCost and gCost fields required for A*
+- Configured proper predicates for canPassThrough and withinReach
+- Code review and debugging of integration components
+
+Ryan Reeves:
+- Implemented path reconstruction logic using parent mapping in A* algorithm
+- Added Manhattan distance heuristic function for A* pathfinding
+- Integrated PathingStrategy into Dude and Fairy classes
+  * Added strategy field initialization
+  * Implemented path caching mechanism (currentPath, currentDestination)
+  * Modified nextPosition() method to use computePath()
+- Created SingleStepPathingStrategy class for initial testing
+- Developed PathingTest.java to verify both pathfinding strategies
+- Tested A* algorithm with various scenarios:
+  * Basic pathfinding from point to point
+  * Obstacle avoidance testing
+  * Path validation and verification
+- Quality assurance, debugging, and prepared project files for submission
+
+==============================================================================
+
+Collaborative Work:
+- Both partners worked together on understanding the assignment requirements
+- Reviewed and tested the integrated pathfinding in the virtual world
+- Verified that entities (Dudes and Fairies) successfully navigate around obstacles
+- Ensured all assignment requirements were met before submission
+
+==============================================================================
+
+Summary:
+This project successfully implements the Strategy Pattern for pathfinding algorithms,
+with a fully functional A* algorithm that allows entities to intelligently navigate
+the virtual world while avoiding obstacles. Both partners contributed to ensuring
+the code compiles, runs correctly, and meets all assignment specifications.
