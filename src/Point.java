@@ -6,11 +6,24 @@ public final class Point {
     // wrapper around an x and y coordinate, and these are marked final besides.
     public final int x;
     public final int y;
+    public double fCost;
+    public int gCost;
 
-    public Point(int x, int y) {
+    public Point(int x, int y)   {
         this.x = x;
         this.y = y;
+        this.fCost = 0.0;
+        this.gCost = 0;
     }
+
+    public double getfCost() {
+        return fCost;
+    }
+
+    public int getgCost() {
+        return gCost;
+    }
+
 
     public int distanceSquared(Point p2) {
         int deltaX = this.x - p2.x;

@@ -1,5 +1,6 @@
 import processing.core.PImage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Dude extends Actionable implements NextPos{
@@ -10,6 +11,9 @@ public abstract class Dude extends Actionable implements NextPos{
     public static final int DUDE_NUM_PROPERTIES = 3;
 
     public int resourceLimit;
+    private final PathingStrategy strategy = new AStarPathingStrategy();
+    private List<Point> currentPath = new ArrayList<>();
+    private Point currentDestination = null;
 
     public Dude(String id, Point position, List<PImage> images,double actionPeriod, double animationPeriod, int resourceLimit) {
         super(id, position, images, actionPeriod, animationPeriod);
@@ -22,17 +26,17 @@ public abstract class Dude extends Actionable implements NextPos{
 
     @Override
     public Point nextPosition(WorldModel world, Point destPos) {
-        int horiz = Integer.signum(destPos.x - this.getPosition().x);
-        Point newPos = new Point(this.getPosition().x + horiz, this.getPosition().y);
-
-        if (horiz == 0 || world.isOccupied(newPos) && !(world.getOccupancyCell(newPos) instanceof Stump)) {
-            int vert = Integer.signum(destPos.y - this.getPosition().y);
-            newPos = new Point(this.getPosition().x, this.getPosition().y + vert);
-
-            if (vert == 0 || world.isOccupied(newPos) && !(world.getOccupancyCell(newPos) instanceof Stump)) {
-                newPos = this.getPosition();
-            }
+        if(!destPos.equals(currentDestination) || currentPath.isEmpty()) {
+            currentPath = strategy.computePath(
+                    this.getPosition(),
+                    destPos,
+                    p-> world.withinBounds(p) && !world.isOccupied(p),
+                    (p1, p2) -> p1.adjacent(p2),
+                    PathingStrategy.CARDINAL_NEIGHBORS
+            );
+            currentDestination = destPos;
         }
-        return newPos;
+        if (currentPath.isEmpty()) return this.getPosition();
+        return currentPath.removeFirst(); // Returns next step, removes it from path
     }
 }
