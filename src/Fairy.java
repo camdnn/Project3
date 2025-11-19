@@ -10,26 +10,31 @@ public class Fairy extends Actionable implements NextPos {
     public static final int FAIRY_ACTION_PERIOD_IDX = 1;
     public static final int FAIRY_NUM_PROPERTIES = 2;
 
+    private final PathingStrategy strategy = new AStarPathingStrategy();
+    private List<Point> currentPath = new ArrayList<>();
+    private Point currentDestination = null;
+
+
     Fairy(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod) {
         super(id, position, images, actionPeriod,animationPeriod);
     }
 
     @Override
     public Point nextPosition(WorldModel world, Point destPos) {
-        int horiz = Integer.signum(destPos.x - this.getPosition().x);
-        Point newPos = new Point(this.getPosition().x + horiz, this.getPosition().y);
-
-        if (horiz == 0 || world.isOccupied(newPos)) {
-            int vert = Integer.signum(destPos.y - this.getPosition().y);
-            newPos = new Point(this.getPosition().x, this.getPosition().y + vert);
-
-            if (vert == 0 || world.isOccupied(newPos)) {
-                newPos = this.getPosition();
-            }
+        if(!destPos.equals(currentDestination) || currentPath.isEmpty()) {
+            currentPath = strategy.computePath(
+                    this.getPosition(),
+                    destPos,
+                    p-> world.withinBounds(p) && !world.isOccupied(p),
+                    (p1, p2) -> p1.adjacent(p2),
+                    PathingStrategy.CARDINAL_NEIGHBORS
+            );
+            currentDestination = destPos;
         }
-
-        return newPos;
+        if (currentPath.isEmpty()) return this.getPosition();
+        return currentPath.removeFirst(); // Returns next step, removes it from path
     }
+
 
     @Override
     public boolean moveTo(WorldModel world, Entity target, EventScheduler scheduler) {
