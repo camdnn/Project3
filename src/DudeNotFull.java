@@ -22,7 +22,7 @@ public class DudeNotFull extends Dude implements Transform{
         } else {
             Point nextPos = this.nextPosition(world, target.getPosition());
 
-            if (!this.getPosition().equals(nextPos)) {
+            if (!this.getPosition().equals(nextPos) && !world.isOccupied(nextPos)) {
                 world.moveEntity(scheduler, this, nextPos);
             }
             return false;

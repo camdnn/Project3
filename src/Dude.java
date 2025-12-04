@@ -30,7 +30,7 @@ public abstract class Dude extends Actionable implements NextPos{
             currentPath = strategy.computePath(
                     this.getPosition(),
                     destPos,
-                    p-> world.withinBounds(p) && !world.isOccupied(p),
+                    p-> world.withinBounds(p) && (!world.isOccupied(p) || world.getOccupancyCell(p) instanceof Stump),
                     (p1, p2) -> p1.adjacent(p2),
                     PathingStrategy.CARDINAL_NEIGHBORS
             );
